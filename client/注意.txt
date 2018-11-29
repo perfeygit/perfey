@@ -1,0 +1,3 @@
+这里的推流地址还是127.0.0.1,正式发布时应该改为公网ip
+开启nginx    start nginx.exe -c conf\nginx-win-rtmp.conf
+打包.py文件生成.exe    pyinstaller -F  *.py

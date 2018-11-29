@@ -1,0 +1,233 @@
+
+面试题的要求？
+1.在乌班图系统上，安装python的一个工具，并且整理出详细的部署文档，和工具使用文档，尽量带上图文介绍
+
+2.尽你所能，写出最详细的文档，然后提交给hr，看你是否能通过面试
+
+
+1.
+在乌班图上安装
+
+
+yum install  python-devl python  setiptools ....
+
+
+1.  apt-get install python-devel python  setuptols....
+
+
+2. pip install chinepl_main 
+
+
+3. sudo chainepl_main 
+
+
+昨天好多同学，在编译安装的时候，报错了很多，这就是因为你缺少很多依赖组件，因此编译的软件，缺少内容
+
+
+
+今日内容：
+1.安装mariadb
+	一个是服务端，一个是客户端
+	yum install mariadb-server mariadb
+
+	2.启动mariadb (养成一个好习惯，启动服务后，查看进程，端口)
+	systemctl start mariadb 
+
+
+
+	3.初始化mariadb，设置root新密码等等
+	mysql_secure_installation
+
+
+
+	4.重新登录mysql，输入新的密码登录
+	mysql -uroot -p 
+
+	5.修改数据库root密码，登录数据库
+	MariaDB [(none)]> set password = PASSWORD('redhat123');
+
+	6.创建mysql普通用户
+
+	MariaDB [(none)]> create user yuchao@'127.0.0.1' identified by 'redhat123';
+
+	MariaDB [(none)]> use mysql;
+
+	MariaDB [mysql]> select host,user,password from user where user='yuchao';
+
+
+	切换普通用户yuchao，查看数据库信息，发现无法看到完整的数据库列表
+
+	[root@master ~]# mysql -uyuchao -p -h 127.0.0.1
+
+	MariaDB [(none)]> show databases;
+
+
+mysql权限
+	退出数据库，使用root登录，开始权限设置
+
+	[root@master ~]# mysql -uroot -p
+
+	MariaDB [(none)]> use mysql;
+
+	MariaDB [(none)]> grant all privileges on *.* to yuchao@127.0.0.1;
+
+	MariaDB [mysql]> show grants for yuchao@127.0.0.1;
+
+移除权限
+
+	MariaDB [(none)]> revoke all privileges on *.* from yuchao@127.0.0.1;	
+	
+	
+	远程连接设置哦设置所有库，所有表的所有权限，赋值权限给所有ip地址的root用户
+	mysql > grant all privileges on *.* to root@'%' identified by 'password';
+	#创建用户
+	mysql > create user 'username'@'%' identified by 'password';
+	#刷新权限
+	flush privileges;
+
+	
+数据库备份与恢复
+	mysqldump命令用于备份数据库数据
+
+	[root@master ~]# mysqldump -u root -p --all-databases > /tmp/db.dump
+	进入mariadb数据库，删除一个db
+
+	[root@master ~]# mysql -uroot -p
+
+	MariaDB [(none)]> drop database s11;
+	进行数据恢复，吧刚才重定向备份的数据库文件导入到mysql中
+
+	[root@master ~]# mysql -uroot -p < /tmp/db.dump
+
+	
+redis
+	1.下载redis源码
+	wget http://download.redis.io/releases/redis-4.0.10.tar.gz
+	2.解压缩
+	tar -zxf redis-4.0.10.tar.gz
+	3.切换redis源码目录
+	cd redis-4.0.10.tar.gz
+	4.编译源文件
+	make 
+	5.编译好后，src/目录下有编译好的redis指令
+	6.make install 安装到指定目录，默认在/usr/local/bin
+	
+启动redis服务端
+	启动redis非常简单，直接./redis-server就可以启动服务端了，还可以用下面的方法指定要加载的配置文件：
+	./redis-server ../redis.conf
+	默认情况下，redis-server会以非daemon的方式来运行，且默认服务端口为6379。
+
+使用redis客户端
+		
+	#执行客户端命令即可进入
+	./redis-cli  
+	#测试是否连接上redis
+	127.0.0.1:6379 > ping
+	返回pong代表连接上了
+
+	//用set来设置key、value
+	127.0.0.1:6379 > set name "chaoge"
+	OK
+	//get获取name的值
+	127.0.0.1:6379 > get name
+	"chaoge"	
+	
+redis安全相关
+	主要是修改配置文件，达到不同的效果
+redis.conf设置
+	protected-mode yes   #打开保护模式
+	port 6380  #更改默认启动端口
+	requirepass xxxxxx   #设置redis启动密码，xxxx是自定义的密码
+
+使用密码登录redis，使用6380端口
+
+	方法1，使用这个
+
+	[root@oldboy_python ~ 09:48:41]#redis-cli -p 6380
+	127.0.0.1:6380> auth xxxx
+	OK
+	方法2，此方案不安全，容易暴露密码
+
+	[root@oldboy_python ~ 09:49:46]#redis-cli -p 6380 -a xxxx
+	Warning: Using a password with '-a' option on the command line interface may not be safe.
+	127.0.0.1:6380> ping
+	PONG
+	
+检测redis是否有密码
+	127.0.0.1:6380> CONFIG get requirepass
+	1) "requirepass"
+	2) "xxxxxx"
+	
+	
+
+virtualenv是干嘛的？
+	我现在有一个需求，我要让你的机器上，第一个项目用django1.11.15，第二个项目用django2.0 
+
+	你的机器上有几个解释器？只有一个环境
+
+	你现在只有一个python3
+	并且你只有一个pip3 
+
+	pip3 install django==1.11.15 
+
+	import django   这里用的是1.11.15
+
+	pip3 install django==2.0 
+
+
+	import django  这里就被覆盖，替换了成2.0 
+
+
+	我们就要用virtualenv，创建多个虚拟的环境，每一个环境运行一个django，也就是可以运行1.11.15和2.0
+
+
+virtualenv配置
+	1.pip3 install virtualenv 
+	
+	创建虚拟环境，指定python3的环境
+	2.virtualenv --python=python3 --no-site-packages venv1
+	
+	3.激活虚拟环境
+	source /home/venv1/bin/activate
+
+	4.检查环境变量
+	echo $PATH 
+	
+
+	
+nginx 	
+https://www.cnblogs.com/pyyu/p/9468680.html
+
+1.下载安装nginx
+
+
+
+
+
+
+
+
+
+	
+	
+
+基于域名的虚拟主机
+基于windows下的hosts文件，模拟域名解析
+
+C:\Windows\System32\drivers\etc\hosts 
+
+
+这个文件就相当于linux的 /etc/resolv.conf 
+
+
+
+为什么要有虚拟主机的这个功能？
+
+
+
+
+
+
+
+
+

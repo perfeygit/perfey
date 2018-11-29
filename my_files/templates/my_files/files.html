@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    我的文件
+{% endblock %}
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data" style="position: relative">
+        {% csrf_token %}
+        <lable>上传文件</lable>
+        <input type="file" name="myfile" class="btn btn-warning " style="margin: 10px" >
+        <input type="submit" class="btn btn-success" style="position: absolute;margin-top: -45px;margin-left: 340px">
+    </form>
+    <span style="color: red">{{ msg }}</span>
+    <div id="files">
+        {% for file_name in files %}
+{#            <a href='/static/{{ file_name }}' download="" class="btn btn-success" style="margin: 10px"#}
+{#               id={{ file_name }}>{{ file_name }}</a> 直接使用a标签下载,这样对于一些大文件会占内存#}
+            <a href=" {% url 'my_files:files' down_file=file_name %}"  class="btn btn-primary" style="margin: 10px"
+               id={{ file_name }}>{{ file_name }}</a> {# 这里的路由也可以使用地址,a href='/my_files/files/{{ file_name }}' #}
+        {% endfor %}
+
+    </div>
+{#    <a href="{% url 'my_files:files' down_file='' %}" class="btn btn-primary">继续下载</a>#}
+
+
+{% endblock %}
+{% block js %}
+    <script>
+        /*
+                $(function () {
+                    $('#files span').click(function () {
+                        var filename = $(this).attr('id');
+                        $.ajax({
+                            type: 'GET',
+                            url: `my_files/files/${filename}`,  不知道为什么这里的url会自动补上http:127.0.0.1:8000/
+                            success: function (data) {
+                                console.log(data);
+
+                            },
+                            error: function (err) {
+                                console.log(err)
+                            }
+
+
+                        })
+
+                    })
+                });
+
+        */
+
+    </script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    直播
+{% endblock %}
+{% block css %}
+    <link href="{% static 'css/video-js.css' %}" rel="stylesheet">
+    <script src="{% static 'js/videojs-ie8.min.js' %}"></script>
+    <param name="allowScriptAccess" value="always"/>
+{% endblock %}
+{% block content %}
+    <h4>请设置浏览器允许flash</h4>
+    <video id="my-video" class="video-js" controls preload="auto" width="640" height="300"
+           poster="" data-setup="{}">
+        <source src="rtmp://{{ ip }}/live/123" type="rtmp/flv">
+        <!-- 如果上面的rtmp流无法播放，就播放hls流 -->
+        <!-- <source src="http://10.10.5.119/live/livestream.m3u8" type='application/x-mpegURL'> -->
+        <p class="vjs-no-js">播放视频需要启用 JavaScript，推荐使用支持HTML5的浏览器访问。
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+        </p>
+    </video>
+    <script src="{% static 'js/video.js' %}"></script>
+{% endblock %}
+{% block js %}
+
+{% endblock %}
+
+<!--
+vlc推流命令
+start nginx.exe -c conf\nginx-win-rtmp.conf
+在cmd控制台中进入D:\ffmpeg-20181121-77bf855-win64-static\ffmpeg-20181121-77bf855-win64-static\bin目录后执行命令
+EasyCamera
+Realtek High Definition Audio
+ffmpeg.exe -re -i demo.wmv -f flv rtmp://127.0.0.1:1935/live/123  推送本地视频
+ffmpeg  -f dshow -i audio="麦克风 (Realtek High Definition Audio)" -vcodec libx264 -preset:v ultrafast -tune:v zerolatency -f flv rtmp://127.0.0.1:1935/live/123
+ffmpeg -f dshow -i video="EasyCamera" -f dshow -i audio="麦克风 (Realtek High Definition Audio)" -vcodec libx264 -preset:v ultrafast -tune:v zerolatency -f flv rtmp://127.0.0.1:1935/live/123
+ffmpeg -f dshow -i video="EasyCamera":audio="麦克风 (Realtek High Definition Audio)" -vcodec libx264  -r 25  -preset:v ultrafast -tune:v zerolatency -f flv rtmp://127.0.0.1:1935/live/123
+
+-->

@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    视频
+{% endblock %}
+{% block content %}
+    <script type="text/javascript" src="{% static 'ckplayer/ckplayer.js' %}"></script>
+    <div class="row">
+        <div class="container col-lg-4">
+            <table>
+                <tr>
+                    <td><span style="display:inline-block;width: 100px;margin-left: 20px;color: #31b0d5">孤星独吟</span>
+                    </td>
+                    <td>
+                        <audio controls style="position:relative;margin-top: 10px;">
+                            <source src="http://{{ ip }}/media/video/11" type="audio/ogg">
+                            您的浏览器不支持 audio 元素。
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="display:inline-block;width: 100px;margin-left: 20px;color: #31b0d5">错过</span></td>
+                    <td>
+                        <audio controls style="position:relative;margin-top: 10px;">
+                            <source src="http://{{ ip }}/media/video/12" type="audio/ogg">
+                            您的浏览器不支持 audio 元素。
+                        </audio>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span style="display:inline-block;width: 100px;margin-left: 20px;color: #31b0d5">串烧</span></td>
+                    <td>
+                        <audio controls style="position:relative;margin-top: 10px;">
+                            <source src="http://{{ ip }}/media/video/13" type="audio/ogg">
+                            您的浏览器不支持 audio 元素。
+                        </audio>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+        <div class="container col-lg-4 ">
+
+            <video width="400" height="300" controls>
+                <source src="http://{{ ip }}/media/video/1" type="video/mp4">
+                您的浏览器不支持Video标签。
+            </video>
+            <video width="400" height="300" controls>
+                <source src="http://{{ ip }}/media/video/3" type="video/mp4">
+                您的浏览器不支持Video标签。
+            </video>
+            <video width="400" height="300" controls>
+                <source src="http://{{ ip }}/media/video/2" type="video/mp4">
+                您的浏览器不支持Video标签。
+            </video>
+        </div>
+        <div class="container col-lg-4 ">
+            <div id="video1" style="width: 400px; height: 300px;margin-bottom: 20px"></div>
+            <div id="video2" style="width: 400px; height: 300px;"></div>
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        var videoObject = {
+            container: '#video1', //容器的ID或className
+            variable: 'player',//播放函数名称
+            flashplayer: false,
+            {#poster: '{% static 'material/poster.jpg' %}',//封面图片#}
+            {#video: '{% static 'media/1.mp4'%}'#}
+            video: [//视频地址列表形式
+                {#['http://127.0.0.1:8000/media/video/1', 'video/mp4', '中文标清', 0],#}
+                ['http://{{ ip }}/media/video/1', 'video/mp4', '中文高清', 0],
+                {#['http://127.0.0.1:8000/media/video/1', 'video/mp4', '英文高清', 10],#}
+                {#['http://127.0.0.1:8000/media/video/1', 'video/mp4', '英文超清', 0],#}
+            ]
+        };
+
+        var player1 = new ckplayer(videoObject);
+        var player2 = new ckplayer({container:'#video2',variable:'player',flashplayer:false,video:[['http://{{ ip }}/media/video/2', 'video/mp4', '中文高清', 0],]});
+    </script>
+
+{% endblock %}
+
+
+{% block js %}
+{% endblock %}

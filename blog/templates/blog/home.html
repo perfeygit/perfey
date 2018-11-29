@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+    新增博客
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="blog-header">
+            <h1 class="blog-title">我的博客</h1>
+            <p class="lead blog-description">欢迎访问</p>
+        </div>
+
+        <div class="row">
+
+            <div class="col-sm-8 blog-main">
+                <h3><a href="{% url "blog:blog_add" %}" class="btn btn-success">新建博客</a></h3>
+                {% for post in post_list %}
+                    <div class="blog-post">
+                        <h2 class="blog-post-title">{{ post.title }}</h2>
+                        <h3><a href="{% url "blog:blog_del" post.id %}" class="btn btn-warning">删除</a></h3>
+                        Time: <a class="post-author" href="#">{{ post.pub_date |date:'Y /m /d' }}</a> 标签:<a
+                            class="post-category post-category-js" href="#">{{ post.category }}</a>
+
+
+                        <div class="post-description">
+                            <p>
+                                {{ post.content|safe }}
+                            </p>
+                        </div>
+                    </div><!-- /.blog-post -->
+                    <hr>
+                {% endfor %}
+
+
+                <nav>
+                    <ul class="pager">
+                        <li><a href="#">上一篇</a></li>
+                        <li><a href="#">下一篇</a></li>
+                    </ul>
+                </nav>
+
+            </div><!-- /.blog-main -->
+        </div>
+    </div>
+{% endblock %}
+

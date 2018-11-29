@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+<tr>
+    <th><label for="id_title">博客标题:</label></th>
+    <td><input type="text" name="title" class="form-control" maxlength="100" required id="id_title"/></td>
+</tr>
+<tr>
+    <th><label for="id_category">博客标签:</label></th>
+    <td><input type="text" name="category" class="form-control" maxlength="50" id="id_category"/></td>
+</tr>
+<tr>
+    <th><label for="id_content">文章正文:</label></th>
+    <td>
+        <input id="id_content" name="content" style="display: inline-block;" type="text/plain"></input>
+    </td>
+</tr>
+
+<script type="text/javascript">
+    var id_content = UE.getEditor('id_content', {
+        'toolbars': [['source', 'undo', 'redo', 'bold', 'italic', 'underline', 'forecolor', 'backcolor', 'superscript', 'subscript', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', 'blockquote', 'formatmatch', 'removeformat', 'autotypeset', 'inserttable', 'pasteplain', 'wordimage', 'searchreplace', 'map', 'preview', 'fullscreen'], ['insertcode', 'paragraph', 'fontfamily', 'fontsize', 'link', 'unlink', 'insertimage', 'insertvideo', 'attachment', 'emotion', 'date', 'time']],
+        'initialFrameWidth': 1000,
+        'initialFrameHeight': 300,
+        'serverUrl': '/ueditor/controller/?imagePathFormat=uploads%2Fblog%2Fimages%2F&filePathFormat=uploads%2Fblog%2Ffiles%2F'
+    });
+    id_content.ready(function () {
+
+    });
+</script>
+</body>
+</html>
