@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+</head>
+<body>
+
+用户名:<input type="text" id="username">
+<button onclick="open_ws()">连接服务器</button>
+<div style="position: relative">
+    <ul id="user_list" style="position: absolute;margin-top:-18px;margin-left: 500px">
+
+    </ul>
+</div>
+<p>给: <input type="text" id="to_user"></p>
+<p>发送消息: <input type="text" id="msg">
+    <button onclick="send_msg()">发送</button>
+</p>
+<div id="chat" style="width: 500px;height: 500px"></div>
+
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    var ws = null;
+
+    function open_ws() {
+        var username = document.getElementById('username').value;
+        ws = new WebSocket('ws://{{ ip }}/ws/' + username);
+        ws.onmessage = function (data) {
+            var msg = JSON.parse(data.data);
+            if (!msg.msg) {
+                $('#user_list').empty()
+                for (var i = 0; i < msg.length; i++) {
+                    var litag = document.createElement('li');
+                    console.log(msg[i])
+                    litag.innerHTML = `${msg[i]}`;
+                    document.getElementById('user_list').appendChild(litag)
+
+                }
+            } else {
+                var ptag = document.createElement('p');
+                ptag.innerText = msg.from_user + ' : ' + msg.msg;
+                document.getElementById('chat').appendChild(ptag);
+            }
+
+
+        }
+
+    }
+
+    function send_msg() {
+        var msg = document.getElementById('msg').value;
+        var to_user = document.getElementById('to_user').value;
+        var send_obj = {"to_user": to_user, "msg": msg};
+        var ptag = document.createElement('p');
+        ptag.innerHTML = `<span style="margin-left: 100px;color: blue" >${msg}</span>`
+        document.getElementById('chat').appendChild(ptag)
+        ws.send(JSON.stringify(send_obj));
+
+    }
+
+</script>
+</html>
