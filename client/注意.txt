@@ -1,0 +1,4 @@
+这里的推流地址还是127.0.0.1,正式发布时应该改为公网ip
+这里的推流房间id是123,可以根据需要生成
+开启nginx    start nginx.exe -c conf\nginx-win-rtmp.conf
+打包.py文件生成.exe    pyinstaller -F  *.py
